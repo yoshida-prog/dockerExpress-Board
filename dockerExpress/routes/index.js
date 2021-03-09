@@ -1,29 +1,40 @@
-var express = require('express');
-var router = express.Router();
-const mysql = require('mysql2');
-const connection = mysql.createConnection({
-  user: 'root',
-  password: 'root',
-  database: 'my_mysql_db',
-  host: 'my_mysql'
-});
-
-connection.connect((err) => {
-  if (err) {
-    console.log('error connectiong: ' + err.stack);
-    return;
-  }
-  console.log('success');
+const express = require('express');
+const router = express.Router();
+const bodyParser = require('body-parser');
+const app = require('../app');
+const registerValidController = require('../controllers/registerValid');
+const loginValidController = require('../controllers/loginValid');
+const authenticate = require('../controllers/authenticate');
+const { body } = require('express-validator');
+const urlencodedParser = bodyParser.urlencoded({
+  extended: false
 });
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
-  connection.query('select * from users;', (err, users) => {
-    console.log('---------------------');
-    console.log(users);
-    console.log('---------------------');
-    res.render('index', { title: 'Express' });
-  });
+router.get('/', (req, res, next) => {
+  res.render('index');
 });
+
+router.get('/register', (req, res) => {
+  res.render('register');
+});
+
+router.get('/board', authenticate, (req, res) => {
+    res.render('board');
+  }
+);
+
+router.post(
+  '/register',
+  urlencodedParser,
+  registerValidController.rootAccessControl.validCheck,
+  registerValidController.rootAccessControl.validResult
+);
+
+router.post(
+  '/index',
+  urlencodedParser,
+  loginValidController.rootAccessControl.validResult
+);
 
 module.exports = router;

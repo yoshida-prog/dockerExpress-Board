@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <title>掲示板 - 新規登録</title>
+    <link href="http://fonts.googleapis.com/earlyaccess/notosansjp.css">
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+
+  <body>
+
+    <header>
+      <div class="headerLeft">
+        Node.js Bulletin Board
+      </div>
+      <div class="HeaderRight">
+        <a href="/board">みんなの投稿</a>
+        <a href="#">投稿を作成</a>
+        <a href="/">ログイン</a>
+        <a href="/register">新規登録</a>
+      </div>
+    </header>
+
+    <% if(typeof errors_array != 'undefined') { %>
+        <div class="registerErrorContainer">
+          <ul>
+            <% for (let n in errors_array) { %>
+            <li>
+              <%= errors_array[n].msg %>
+            </li>
+            <% } %>
+          </ul>
+        </div>
+    <% } %>
+
+    <main>
+      <div class="registerContainer">
+        <form action="/register" method="POST">
+          <div class="inputForm">
+            <p>name</p>
+            <input type="text" name="username" value="<% if(typeof errors_array != 'undefined') { %><%= username %><% } %>">
+          </div>
+          <div class="inputForm">
+            <p>email</p>
+            <input type="email" name="email" value="<% if(typeof errors_array != 'undefined') { %><%= email %><% } %>">
+          </div>
+          <div class="inputForm">
+            <p>password</p>
+            <input type="password" name="password">
+          </div>
+          <div class="inputForm">
+            <p>password comfirm</p>
+            <input type="password" name="confirmPassword">
+          </div>
+          <input type="submit" value="アカウントを作成">
+        </form>
+      </div>
+    </main>
+
+  </body>
+
+</html>
