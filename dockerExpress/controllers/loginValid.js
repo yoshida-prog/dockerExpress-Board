@@ -20,15 +20,15 @@ connection.connect((err) => {
 
 exports.rootAccessControl = {
   validResult: (req, res) => {
-    const password = req.body['password'];
-    const email = req.body['email'];
+    const password = req.body.password;
+    const email = req.body.email;
     if (!password || !email) {
       const loginErrorMessage1 = 'メールアドレスもしくはパスワードが入力されていません';
       res.render('index', {
         err: loginErrorMessage1
       });
     } else {
-      const columns = ['email', 'password']
+      const columns = ['name', 'email', 'password']
       connection
         .query(
             'select ?? from ?? where email = ? and password = ?',
@@ -40,18 +40,16 @@ exports.rootAccessControl = {
                         err: loginErrorMessage2
                     });
                 } else {
+                    const username = results[0].name;
                     const queryEmail = results[0].email;
                     const queryPassword = results[0].password;
                     if (queryEmail === email && queryPassword === password) {
                         const payload = {
-                            email: email
+                            username: username
                         };
                         const token = jwt.sign(payload, config.jwt.secret, config.jwt.options);
-                        const body = {
-                            email: email,
-                            token: token
-                        };
-                        res.json(body);
+                        res.cookie('token', token, {maxAge: 3600000});
+                        res.redirect('/board');
                     } else {
                         const loginErrorMessage2 = 'メールアドレスまたはパスワードが間違っています';
                         res.render('index', {
