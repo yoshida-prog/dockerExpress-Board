@@ -1,9 +1,11 @@
+const secretKey = 'secret_key';
+const expires = '10m';
+
 module.exports = {
     jwt: {
-        secret: 'secret_key',
+        secret: secretKey,
         options: {
-            algorithm: 'HS256',
-            expiresIn: '10m'
+            expiresIn: expires
         }
     }
 };
