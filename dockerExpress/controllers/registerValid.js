@@ -1,5 +1,7 @@
 const { check, validationResult } = require('express-validator');
 const express = require('express');
+const jwt = require('jsonwebtoken');
+const config = require('../config/config');
 const router = express.Router();
 const mysql = require('mysql2');
 const connection = mysql.createConnection({
@@ -35,8 +37,8 @@ exports.rootAccessControl = {
   ],
   validResult: (req, res) => {
     const errors = validationResult(req);
-    const username = req.body['username'];
-    const password = req.body['password'];
+    const username = req.body.username;
+    const password = req.body.password;
     // emailフォームが空の場合に送信するとなぜか@のみvalueに格納されているので以下の４行の処理を行う
     let email = req.body['email'];
     if (email === '@') {
@@ -54,7 +56,12 @@ exports.rootAccessControl = {
         if (err) {
             console.log(err);
         }
-        res.render('board');
+        const payload = {
+            username: username
+        };
+        const token = jwt.sign(payload, config.jwt.secret, config.jwt.options);
+        res.cookie('token', token, {maxAge: 3600000});
+        res.redirect('/board');
       });
     }
   }
