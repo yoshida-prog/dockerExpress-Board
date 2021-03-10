@@ -5,6 +5,7 @@ const app = require('../app');
 const registerValidController = require('../controllers/registerValid');
 const loginValidController = require('../controllers/loginValid');
 const authenticate = require('../controllers/authenticate');
+const logout = require('../controllers/logout');
 const { body } = require('express-validator');
 const urlencodedParser = bodyParser.urlencoded({
   extended: false
@@ -19,10 +20,11 @@ router.get('/register', (req, res) => {
   res.render('register');
 });
 
-router.get('/board', authenticate, (req, res) => {
-    res.render('board');
-  }
-);
+router.get('/board', authenticate);
+
+router.get('/logout', logout, (req, res) => {
+  res.redirect('/');
+});
 
 router.post(
   '/register',
