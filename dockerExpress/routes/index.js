@@ -10,9 +10,24 @@ const { body } = require('express-validator');
 const urlencodedParser = bodyParser.urlencoded({
   extended: false
 });
+const { Sequelize } = require('sequelize');
+const sequelize = new Sequelize('my_mysql_db', 'root', 'root', {
+  host: 'my_mysql',
+  dialect: 'mysql',
+});
 
 /* GET home page. */
-router.get('/', (req, res, next) => {
+router.get('/', async(req, res, next) => {
+  try {
+    await sequelize.authenticate();
+    await sequelize.query('select * from users').then(result => {
+      console.log(result);
+    }).catch(err => {
+      console.log(err);
+    });
+  } catch (error) {
+    console.error('Unable to connect to the database:', error);
+  }
   res.render('index');
 });
 
