@@ -15,19 +15,27 @@ const sequelize = new Sequelize('my_mysql_db', 'root', 'root', {
   host: 'my_mysql',
   dialect: 'mysql',
 });
+const usersTable = sequelize.define('users', {
+  id: {
+    type: Sequelize.INTEGER,
+    primaryKey: true
+  },
+  name: {
+    type: Sequelize.STRING
+  },
+  email: {
+    type: Sequelize.STRING
+  },
+  password: {
+    type: Sequelize.STRING
+  }
+},{
+  freezeTableName: true,
+  timestamps: false
+});
 
 /* GET home page. */
 router.get('/', async(req, res, next) => {
-  try {
-    await sequelize.authenticate();
-    await sequelize.query('select * from users').then(result => {
-      console.log(result);
-    }).catch(err => {
-      console.log(err);
-    });
-  } catch (error) {
-    console.error('Unable to connect to the database:', error);
-  }
   res.render('index');
 });
 
