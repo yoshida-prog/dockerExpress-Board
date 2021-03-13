@@ -1,23 +1,8 @@
 const { check, validationResult } = require('express-validator');
-const express = require('express');
 const jwt = require('jsonwebtoken');
 const config = require('../config/config');
-const router = express.Router();
-const mysql = require('mysql2');
-const connection = mysql.createConnection({
-  user: 'root',
-  password: 'root',
-  database: 'my_mysql_db',
-  host: 'my_mysql'
-});
-
-connection.connect((err) => {
-    if (err) {
-        console.log('error connectiong: ' + err.stack);
-        return;
-    }
-    console.log('success');
-});
+const { Sequelize } = require('sequelize');
+const db = require('../models/DBconfig');
 
 exports.rootAccessControl = {
   validCheck: [
@@ -52,12 +37,13 @@ exports.rootAccessControl = {
         email,
       });
     } else {
-      connection.query('insert into users set ?', {name: username, email: email, password: password}, (err, results, fields) => {
-        if (err) {
-            console.log(err);
-        }
+      db.User.create({
+        name: username,
+        email: email,
+        password: password
+      }).then(() => {
         const payload = {
-            username: username
+          username: username
         };
         const token = jwt.sign(payload, config.jwt.secret, config.jwt.options);
         res.cookie('token', token, {maxAge: 3600000});
