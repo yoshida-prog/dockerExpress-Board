@@ -24,11 +24,7 @@ exports.rootAccessControl = {
     const errors = validationResult(req);
     const username = req.body.username;
     const password = req.body.password;
-    // emailフォームが空の場合に送信するとなぜか@のみvalueに格納されているので以下の４行の処理を行う
-    let email = req.body['email'];
-    if (email === '@') {
-      email = '';
-    }
+    const email = req.body['email'];
     if (!errors.isEmpty()) {
       const errors_array = errors.array();
       res.render('register', {
@@ -39,15 +35,17 @@ exports.rootAccessControl = {
     } else {
       db.User.create({
         name: username,
-        email: email,
-        password: password
+        email,
+        password
       }).then(() => {
         const payload = {
-          username: username
+          username
         };
         const token = jwt.sign(payload, config.jwt.secret, config.jwt.options);
         res.cookie('token', token, {maxAge: 3600000});
         res.redirect('/board');
+      }).catch(err => {
+        res.status(500).send(err);
       });
     }
   }
