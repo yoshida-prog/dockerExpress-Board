@@ -1,8 +1,9 @@
 const { check, validationResult } = require('express-validator');
 const jwt = require('jsonwebtoken');
-const config = require('../config/config');
+const config = require('../config/jwtConfig');
 const { Sequelize } = require('sequelize');
 const db = require('../models/DBconfig');
+const bcrypt = require('bcrypt');
 
 exports.rootAccessControl = {
   validCheck: [
@@ -20,7 +21,7 @@ exports.rootAccessControl = {
         return true;
       })
   ],
-  validResult: (req, res) => {
+  validResult: async (req, res) => {
     const errors = validationResult(req);
     const username = req.body.username;
     const password = req.body.password;
@@ -33,10 +34,11 @@ exports.rootAccessControl = {
         email,
       });
     } else {
+      const hashed_password = await bcrypt.hashSync(password, 10);
       db.User.create({
         name: username,
         email,
-        password
+        password: hashed_password
       }).then(() => {
         const payload = {
           username
