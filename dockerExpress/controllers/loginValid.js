@@ -16,8 +16,8 @@ exports.rootAccessControl = {
       const columns = ['name', 'email', 'password'];
       db.User.findOne({
         where: {
-          email: email,
-          password: password
+          email,
+          password
         }
       }).then(results => {
         if (!results) {
@@ -31,7 +31,7 @@ exports.rootAccessControl = {
           const queryPassword = results.password;
           if (queryEmail === email && queryPassword === password) {
               const payload = {
-                  username: username
+                  username
               };
               const token = jwt.sign(payload, config.jwt.secret, config.jwt.options);
               res.cookie('token', token, {maxAge: 3600000});
@@ -43,6 +43,8 @@ exports.rootAccessControl = {
               });
           }
         } 
+      }).catch(err => {
+        res.status(500).send(err);
       });
     }
   }
