@@ -1,7 +1,8 @@
 const jwt = require('jsonwebtoken');
-const config = require('../config/config');
+const config = require('../config/jwtConfig');
 const { Sequelize } = require('sequelize');
 const db = require('../models/DBconfig');
+const bcrypt = require('bcrypt');
 
 exports.rootAccessControl = {
   validResult: (req, res) => {
@@ -13,13 +14,11 @@ exports.rootAccessControl = {
         err: loginErrorMessage1
       });
     } else {
-      const columns = ['name', 'email', 'password'];
       db.User.findOne({
         where: {
-          email,
-          password
+          email
         }
-      }).then(results => {
+      }).then(async (results) => {
         if (!results) {
           const loginErrorMessage2 = 'メールアドレスまたはパスワードが間違っています';
           res.render('index', {
@@ -28,8 +27,9 @@ exports.rootAccessControl = {
         } else {
           const username = results.name;
           const queryEmail = results.email;
-          const queryPassword = results.password;
-          if (queryEmail === email && queryPassword === password) {
+          const hashedPassword = results.password;
+          const compared = await bcrypt.compare(password, hashedPassword);
+          if (queryEmail === email && compared === true) {
               const payload = {
                   username
               };
