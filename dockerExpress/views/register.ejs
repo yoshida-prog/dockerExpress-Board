@@ -35,27 +35,49 @@
 
     <main>
       <div class="registerContainer">
-        <form action="/register" method="POST">
+        <form id="registerForm" action="/register" method="POST">
           <div class="inputForm">
             <p>name</p>
-            <input type="text" name="username" value="<% if(typeof errors_array != 'undefined') { %><%= username %><% } %>">
+            <input id="name" type="text" name="username" value="<% if(typeof errors_array != 'undefined') { %><%= username %><% } %>">
           </div>
           <div class="inputForm">
             <p>email</p>
-            <input type="email" name="email" value="<% if(typeof errors_array != 'undefined') { %><%= email %><% } %>">
+            <input id="email" type="email" name="email" value="<% if(typeof errors_array != 'undefined') { %><%= email %><% } %>">
           </div>
           <div class="inputForm">
             <p>password</p>
-            <input type="password" name="password">
+            <input id="password" type="password" name="password">
           </div>
           <div class="inputForm">
             <p>password comfirm</p>
-            <input type="password" name="confirmPassword">
+            <input id="comfirm" type="password" name="confirmPassword">
           </div>
-          <input type="submit" value="アカウントを作成">
+          <input id="submitBtn" type="submit" value="アカウントを作成">
         </form>
       </div>
     </main>
+
+    <script>
+      const registerForm = document.getElementById('registerForm');
+      const nameForm = document.getElementById('name');
+      const emailForm = document.getElementById('email');
+      const passwordForm = document.getElementById('password');
+      const comfirmForm = document.getElementById('comfirm');
+      const submitBtn = document.getElementById('submitBtn');
+      if (!nameForm.value || !emailForm.value || !passwordForm.value || !comfirmForm.value) {
+          submitBtn.disabled = true;
+          submitBtn.style.backgroundColor = "#c0c0c0";
+        }
+      registerForm.onchange = () => {
+        if (!nameForm.value || !emailForm.value || !passwordForm.value || !comfirmForm.value) {
+          submitBtn.disabled = true;
+          submitBtn.style.backgroundColor = "#c0c0c0";
+        } else {
+          submitBtn.disabled = false;
+          submitBtn.style.backgroundColor = "#00acff";
+        }
+      };
+    </script>
 
   </body>
 
