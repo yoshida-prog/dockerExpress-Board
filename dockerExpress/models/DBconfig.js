@@ -21,6 +21,26 @@ const User = sequelize.define('users', {
   freezeTableName: true,
   timestamps: false
 });
+const Test = sequelize.define('test', {
+    id: {
+      type: Sequelize.INTEGER,
+      primaryKey: true
+    },
+    name: {
+      type: Sequelize.STRING
+    }
+  },{
+    freezeTableName: true,
+    timestamps: false
+});
+(async() => {
+    await Test.sync({ force: true });
+    const test = await Test.create({
+        name: 'test'
+    });
+    const rows = await sequelize.query('select * from test');
+    console.log(rows);
+})
 
 module.exports = {
     sequelize: sequelize,
