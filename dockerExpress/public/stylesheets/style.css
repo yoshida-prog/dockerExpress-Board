@@ -1,8 +1,140 @@
 body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  margin: 0 auto;
+  font-family: 'Noto Sans JP', sans-serif;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  background-color: #333;
+  color: #fafafa;
+  padding: 10px;
+}
+
+.headerLeft {
+  font-size: 18px;
+}
+
+.headerRight {
+  display: flex;
+  width: 400px;
+  justify-content: space-between;
 }
 
 a {
-  color: #00B7FF;
+  text-decoration: none;
+  color: #999;
+}
+
+a:hover {
+  color: #fafafa;
+}
+
+ul.menu {
+  width: 100px;
+  padding: 0;
+  margin: 0;
+  text-align: left;
+  cursor: pointer;
+}
+
+li {
+  list-style: none;
+}
+
+.init-bottom {
+  color: #999;
+}
+
+.init-bottom:hover {
+  color: #fafafa;
+}
+
+.menu > li.menu__single {
+  position: relative;
+}
+
+.arrow-pointer {
+  float: right;
+}
+
+.menu__second-level {
+  position: absolute;
+  right: -200px;
+  top: 20px;
+  width: 100%;
+  padding: 0;
+  background-color: #333;
+  visibility: hidden;
+  opacity: 0;
+  transition: top .2s, opacity .2s;
+}
+
+li.menu__single:hover ul.menu__second-level {
+  top: 25px;
+  right: 0px;
+  visibility: visible;
+  opacity: 1;
+}
+
+.registerContainer {
+  width: 80%;
+  margin: 0 auto;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 300px;
+  justify-content: center;
+  margin: 100px;
+}
+
+input[type="text"] {
+  height: 20px;
+  border: none;
+  border-bottom: 1.5px solid #333;
+  width: 250px;
+}
+
+input[type="email"] {
+  height: 20px;
+  border: none;
+  border-bottom: 1.5px solid #333;
+  width: 250px;
+}
+
+input[type="password"] {
+  height: 20px;
+  border: none;
+  border-bottom: 1.5px solid #333;
+  width: 250px;
+}
+
+input[type="submit"] {
+  margin: 20px;
+  border: none;
+  width: 140px;
+  padding: 5px;
+  border-radius: 15px;
+  background-color: #00acff;
+  color: #fafafa;
+  outline: none;
+}
+
+input[type="text"]:focus {
+  outline: 0;
+}
+
+input[type="email"]:focus {
+  outline: 0;
+}
+
+input[type="password"]:focus {
+  outline: 0;
+}
+
+input[type="submit"]:hover {
+  background-color: #5bcaff;
 }

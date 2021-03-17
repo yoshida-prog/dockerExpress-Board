@@ -1,11 +1,48 @@
 <!DOCTYPE html>
 <html>
+
   <head>
-    <title><%= title %></title>
+    <title>掲示板 - ログイン</title>
+    <link href="http://fonts.googleapis.com/earlyaccess/notosansjp.css">
     <link rel='stylesheet' href='/stylesheets/style.css' />
   </head>
+
   <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
+
+    <header>
+      <div class="headerLeft">
+        Node.js Bulletin Board
+      </div>
+      <div class="headerRight">
+        <a href="/board">みんなの投稿</a>
+        <a href="#">投稿を作成</a>
+        <a href="/">ログイン</a>
+        <a href="/register">新規登録</a>
+      </div>
+    </header>
+
+    <% if(typeof err != 'undefined') { %>
+      <div class="registerErrorContainer">
+        <%= err %>
+      </div>
+    <% } %>
+
+    <main>
+      <div class="registerContainer">
+        <form action="/index" method="POST">
+          <div class="inputForm">
+            <p>email</p>
+            <input type="email" name="email" placeholder="メールアドレスを入力">
+          </div>
+          <div class="inputForm">
+            <p>password</p>
+            <input type="password" name="password" placeholder="パスワードを入力">
+          </div>
+          <input type="submit" value="ログイン">
+        </form>
+      </div>
+    </main>
+
   </body>
+
 </html>

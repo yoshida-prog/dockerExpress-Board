@@ -20,6 +20,7 @@ services:
       - 3000:3000
     depends_on: 
       - my_mysql
+    env_file: ./.env
 
 volumes: 
   my_volume:
