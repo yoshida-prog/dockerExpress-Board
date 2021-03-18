@@ -3,7 +3,8 @@ const sequelize = new Sequelize('my_mysql_db', 'root', 'root', {
     host: 'my_mysql',
     dialect: 'mysql',
   });
-const User = sequelize.define('users', {
+
+const User = sequelize.define('Users', {
   id: {
     type: Sequelize.INTEGER,
     primaryKey: true
@@ -16,33 +17,35 @@ const User = sequelize.define('users', {
   },
   password: {
     type: Sequelize.STRING
-  }
+  },
+  createdAt: Sequelize.DATE,
+  updateAt: Sequelize.DATE
 },{
-  freezeTableName: true,
-  timestamps: false
+  freezeTableName: true
 });
-const Test = sequelize.define('test', {
+
+const Post = sequelize.define('Posts', {
     id: {
       type: Sequelize.INTEGER,
       primaryKey: true
     },
-    name: {
+    userID: {
+      type: Sequelize.INTEGER
+    },
+    title: {
       type: Sequelize.STRING
-    }
+    },
+    content: {
+      type: Sequelize.STRING
+    },
+    createdAt: Sequelize.DATE,
+    updateAt: Sequelize.DATE
   },{
-    freezeTableName: true,
-    timestamps: false
+    freezeTableName: true
 });
-(async() => {
-    await Test.sync({ force: true });
-    const test = await Test.create({
-        name: 'test'
-    });
-    const rows = await sequelize.query('select * from test');
-    console.log(rows);
-})
 
 module.exports = {
     sequelize: sequelize,
-    User: User
+    User: User,
+    Post: Post
 };
