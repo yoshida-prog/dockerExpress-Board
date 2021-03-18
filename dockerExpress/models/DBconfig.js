@@ -19,7 +19,7 @@ const User = sequelize.define('Users', {
     type: Sequelize.STRING
   },
   createdAt: Sequelize.DATE,
-  updateAt: Sequelize.DATE
+  updatedAt: Sequelize.DATE
 },{
   freezeTableName: true
 });
@@ -39,7 +39,7 @@ const Post = sequelize.define('Posts', {
       type: Sequelize.STRING
     },
     createdAt: Sequelize.DATE,
-    updateAt: Sequelize.DATE
+    updatedAt: Sequelize.DATE
   },{
     freezeTableName: true
 });
