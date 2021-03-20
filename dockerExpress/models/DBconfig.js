@@ -32,6 +32,9 @@ const Post = sequelize.define('Posts', {
     userID: {
       type: Sequelize.INTEGER
     },
+    username: {
+      type: Sequelize.STRING
+    },
     title: {
       type: Sequelize.STRING
     },
