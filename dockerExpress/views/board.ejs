@@ -15,7 +15,7 @@
       </div>
       <div class="headerRight">
         <a href="/board">みんなの投稿</a>
-        <a href="#">投稿を作成</a>
+        <a href="/create">投稿を作成</a>
         <ul class="menu">
             <li class="menu__single">
                 <div class="init-bottom"><span><%= username %></span><span class="arrow-pointer">▼</span></div>
@@ -28,8 +28,50 @@
     </header>
 
     <main>
-      
+      <% posts.forEach((value, key) => { %>
+        <div class="viewContainer">
+          <h3><%= value.title %></h3>
+          <p class="postContent"><%= value.content %></p>
+          <p class="ontributor">投稿者： <%= value.username %></p>
+          <p class="editContainer">
+            <span>ここにいいね機能</span>
+            <% if (username === value.username) { %>
+              <span>
+                <button class="editBtn" type="submit" value="<%= value.id %>">編集</button>
+                <button class="deleteBtn" type="submit" value="<%= value.id %>">削除</button>
+              </span>
+            <% } %>
+          </p>
+        </div>
+      <% }); %>
     </main>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const editBtns = document.querySelectorAll('.editBtn');
+        const deleteBtns = document.querySelectorAll('.deleteBtn');
+        for(var i = 0; i < editBtns.length; i++) {
+          editBtns[i].addEventListener('click', (e) => {
+            const form = document.createElement('form');
+            const editId = e.target.value;
+            form.action = '/edit/' + editId;
+            form.method = 'GET';
+            document.body.append(form);
+            form.submit();
+          });
+        };
+        for(var i = 0; i < deleteBtns.length; i++) {
+          deleteBtns[i].addEventListener('click', (e) => {
+            const form = document.createElement('form');
+            const deleteId = e.target.value;
+            form.action = '/delete/' + deleteId;
+            form.method = 'GET';
+            document.body.append(form);
+            form.submit();
+          });
+        };
+      });
+    </script>
 
   </body>
 
