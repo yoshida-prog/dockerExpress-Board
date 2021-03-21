@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <title>掲示板 - 投稿を作成</title>
+    <link href="http://fonts.googleapis.com/earlyaccess/notosansjp.css">
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+
+  <body>
+
+    <header>
+      <div class="headerLeft">
+        Node.js Bulletin Board
+      </div>
+      <div class="headerRight">
+        <a href="/board">みんなの投稿</a>
+        <a href="/create">投稿を作成</a>
+        <ul class="menu">
+            <li class="menu__single">
+                <div class="init-bottom"><span><%= username %></span><span class="arrow-pointer">▼</span></div>
+                <ul class="menu__second-level">
+                    <li><a href="/logout">ログアウト</a></li>
+                </ul>
+            </li>
+        </ul>
+      </div>
+    </header>
+
+    <% if(typeof err != 'undefined') { %>
+        <div class="registerErrorContainer">
+            <%= err %>
+        </div>
+    <% } %>
+
+    <main>
+      <div id="createContainer">
+        <form id="createForm" action="/create" method="POST">
+          <label for="title">タイトル</label>
+          <input type="text" id="title" name="title">
+          <label for="textContent">投稿内容</label>
+          <textarea id="textContent" name="content"></textarea>
+          <input id="submitBtn" type="submit" value="投稿">
+        </form>
+      </div>
+    </main>
+
+  </body>
+
+</html>
