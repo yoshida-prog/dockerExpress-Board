@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const config = require('../config/config');
+const config = require('../config/jwtConfig');
 
 module.exports = (req, res, next) => {
     const key = Object.keys(req.cookies);
