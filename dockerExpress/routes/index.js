@@ -1,15 +1,13 @@
 const express = require('express');
 const router = express.Router();
 const bodyParser = require('body-parser');
-const app = require('../app');
 const { Sequelize } = require('sequelize');
-const db = require('../models/DBconfig');
+const auth = require('../middleware/auth');
 const registerValidController = require('../controllers/registerValid');
 const loginValidController = require('../controllers/loginValid');
 const createController = require('../controllers/createContent.js');
 const editContentController = require('../controllers/editContent');
 const deleteContentController = require('../controllers/deleteContent');
-const authenticate = require('../controllers/authenticate');
 const viewPostList = require('../controllers/viewPostList');
 const logout = require('../controllers/logout');
 const { body } = require('express-validator');
@@ -17,19 +15,21 @@ const urlencodedParser = bodyParser.urlencoded({
   extended: false
 });
 
-router.get('/', async(req, res, next) => {
+router.get('/', (req, res) => {
   res.render('index');
 });
 router.get('/register', (req, res) => {
   res.render('register');
 });
-router.get('/board', viewPostList);
-router.get('/create', authenticate);
+router.get('/board', auth, viewPostList);
+router.get('/create', auth, (req, res) => {
+  res.render(req.url.replace('/', ''), {username: req.username});
+});
 router.get('/logout', logout, (req, res) => {
   res.redirect('/');
 });
-router.get('/edit/:id', editContentController.rootAccessControl.editRouting);
-router.get('/delete/:id', deleteContentController.rootAccessControl.delete);
+router.get('/edit/:id', auth, editContentController.rootAccessControl.editRouting);
+router.get('/delete/:id', auth, deleteContentController.rootAccessControl.delete);
 
 router.post(
   '/register',
@@ -45,11 +45,13 @@ router.post(
 router.post(
   '/create',
   urlencodedParser,
+  auth,
   createController.rootAccessControl.createContent
 );
 router.post(
   '/edit/:id',
   urlencodedParser,
+  auth,
   editContentController.rootAccessControl.editContent
 );
 
