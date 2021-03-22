@@ -1,5 +1,3 @@
-const jwt = require('jsonwebtoken');
-const config = require('../config/jwtConfig');
 const { Sequelize } = require('sequelize');
 const db = require('../models/DBconfig');
 
@@ -7,9 +5,7 @@ exports.rootAccessControl = {
     createContent: (req, res) => {
         const title = req.body.title;
         const content = req.body.content;
-        const token = req.cookies.token;
-        const decoded = jwt.verify(token, config.jwt.secret);
-        const username = decoded.username;
+        const username = req.username;
         if (!title || !content) {
             const createErrorMessage = 'タイトルもしくは投稿内容が入力されていません';
             res.render('create', {
