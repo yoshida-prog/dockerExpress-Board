@@ -1,13 +1,9 @@
-const jwt = require('jsonwebtoken');
-const config = require('../config/jwtConfig');
 const { Sequelize } = require('sequelize');
 const db = require('../models/DBconfig');
 
 exports.rootAccessControl = {
     editRouting: (req, res) => {
-        const token = req.cookies.token;
-        const decoded = jwt.verify(token, config.jwt.secret);
-        const username = decoded.username;
+        const username = req.username;
         if (!username) {
             res.status(500).send('トークンが発行されていません');
         } else {
@@ -39,9 +35,7 @@ exports.rootAccessControl = {
         const isTitle = req.body.title;
         const isContent = req.body.content;
         const editID = req.params.id;
-        const token = req.cookies.token;
-        const decoded = jwt.verify(token, config.jwt.secret);
-        const username = decoded.username;
+        const username = req.username;
         if (!isTitle || !isContent) {
             const editContentErrorMessage = 'タイトルもしくは投稿内容が入力されていません';
             db.Post.findOne({
