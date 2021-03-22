@@ -1,15 +1,10 @@
-const jwt = require('jsonwebtoken');
-const config = require('../config/jwtConfig');
 const { Sequelize } = require('sequelize');
 const db = require('../models/DBconfig');
 
 module.exports = (req, res, next) => {
     try {
-        const token = req.cookies.token;
-        const decoded = jwt.verify(token, config.jwt.secret);
-        const username = decoded.username;
+        const username = req.username;
         const url = req.url.replace('/', '');
-        req.jwtPayload = decoded;
         db.User.findOne({
             where: {
                 name: username
@@ -20,7 +15,6 @@ module.exports = (req, res, next) => {
                     ['id', 'DESC']
                 ]
             }).then(posts => {
-                const postArray = [];
                 res.render(url, {
                     username,
                     posts
