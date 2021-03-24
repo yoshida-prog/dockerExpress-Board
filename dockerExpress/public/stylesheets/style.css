@@ -8,7 +8,12 @@ header {
   justify-content: space-between;
   background-color: #333;
   color: #fafafa;
+  min-width: 800px;
   padding: 10px;
+}
+
+main {
+  min-width: 800px;
 }
 
 .headerLeft {
@@ -18,12 +23,13 @@ header {
 .headerRight {
   display: flex;
   width: 400px;
-  justify-content: space-between;
+  justify-content: flex-end;
 }
 
 a {
   text-decoration: none;
   color: #999;
+  padding: 0 20px
 }
 
 a:hover {
@@ -32,7 +38,7 @@ a:hover {
 
 ul.menu {
   width: 100px;
-  padding: 0;
+  padding: 0 20px;
   margin: 0;
   text-align: left;
   cursor: pointer;
@@ -60,9 +66,9 @@ li {
 
 .menu__second-level {
   position: absolute;
-  right: -200px;
+  left: -200px;
   top: 20px;
-  width: 100%;
+  width: 120px;
   padding: 0;
   background-color: #333;
   visibility: hidden;
@@ -72,7 +78,7 @@ li {
 
 li.menu__single:hover ul.menu__second-level {
   top: 25px;
-  right: 0px;
+  left: 0px;
   visibility: visible;
   opacity: 1;
 }
@@ -137,4 +143,69 @@ input[type="password"]:focus {
 
 input[type="submit"]:hover {
   background-color: #5bcaff;
+}
+
+/* -------------------投稿一覧画面--------------------*/
+
+.viewContainer {
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 10px;
+  border: 1px solid #333;
+}
+
+.view {
+  display: block;
+  align-items: unset;
+  height: auto;
+  margin: auto;
+}
+
+.viewContainer > p.editContainer {
+  display: inline-block;
+  margin: 0;
+  margin-right: 10px;
+}
+
+form#editBtn {
+  display: inline-block;
+  height: auto;
+  margin: 0;
+  width: 50px;
+}
+
+form#deleteBtn {
+  display: inline-block;
+  height: auto;
+  margin: 0;
+  width: 50px;
+}
+
+/* -------------------投稿作成画面--------------------*/
+
+form#createForm {
+  align-items: baseline;
+  justify-content: start;
+}
+
+#title {
+  border: 1px solid rgb(118, 118, 118);
+  width: 100%;
+  min-width: 420px;
+  border-radius: 3px;
+}
+
+textarea#textContent {
+  width: 100%;
+  min-width: 420px;
+  height: 120px;
+  border-radius: 3px;
+}
+
+textarea#textContent:focus {
+  outline: 0;
+}
+
+input#submitBtn {
+  margin: 20px auto;
 }
