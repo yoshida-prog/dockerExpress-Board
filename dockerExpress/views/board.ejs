@@ -33,21 +33,59 @@
           <h3><%= value.title %></h3>
           <p class="postContent"><%= value.content %></p>
           <p class="ontributor">投稿者： <%= value.username %></p>
-          <p class="editContainer">
-            <span>ここにいいね機能</span>
-            <% if (username === value.username) { %>
-              <span>
-                <button class="editBtn" type="submit" value="<%= value.id %>">編集</button>
-                <button class="deleteBtn" type="submit" value="<%= value.id %>">削除</button>
-              </span>
-            <% } %>
-          </p>
+          <form class="favoriteForm">
+            <input class="favoriteBtn" type="button" value="&#9825;"><span class="favoriteCount" data-contentid="<%= value.id %>">0</span>
+          </form>
+          <% if (username === value.username) { %>
+            <span>
+              <button class="editBtn" type="submit" value="<%= value.id %>">編集</button>
+              <button class="deleteBtn" type="submit" value="<%= value.id %>">削除</button>
+            </span>
+          <% } %>
         </div>
       <% }); %>
     </main>
 
     <script>
       document.addEventListener('DOMContentLoaded', () => {
+        // いいねボタンのFetchAPIのPOST送信
+        const favoriteForm = document.querySelectorAll('.favoriteForm input');
+        const favoriteBtn = document.querySelectorAll('.favoriteBtn');
+        const url = '/favorite';
+        const postFavorite = (e) => {
+          const contentID = e.target.nextElementSibling.dataset.contentid;
+          const favoriteCount = e.target.nextElementSibling.innerText;
+          console.log(e.target.value);
+          if (e.target.value === '') {
+            console.log('OK');
+          }
+          const formData = {
+            contentID,
+            favoriteCount
+          };
+          // ここにハートマークを反転させる処理を追加する。
+          fetch(url, {
+            method: 'POST',
+            headers: {
+              'Content-type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+          }).then((respose) => {
+            if (!respose.ok) {
+              throw 'favorite post error!';
+            }
+            console.log('OK');
+            return respose.text();
+          }).catch(error => {
+            alert(error);
+          });
+        };
+        for(var i = 0; i < favoriteBtn.length; i++) {
+          // ここにいいね済みかどうかで、inputのvalue属性をどのハートにするか決める。
+          favoriteBtn[i].addEventListener('click', postFavorite, false);
+        };
+
+        // 編集・削除ボタンを動的に作成
         const editBtns = document.querySelectorAll('.editBtn');
         const deleteBtns = document.querySelectorAll('.deleteBtn');
         for(var i = 0; i < editBtns.length; i++) {

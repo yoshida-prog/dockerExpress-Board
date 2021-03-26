@@ -8,6 +8,7 @@ const loginValidController = require('../controllers/loginValid');
 const createController = require('../controllers/createContent.js');
 const editContentController = require('../controllers/editContent');
 const deleteContentController = require('../controllers/deleteContent');
+const favoriteController = require('../controllers/favorite');
 const viewPostList = require('../controllers/viewPostList');
 const logout = require('../controllers/logout');
 const { body } = require('express-validator');
@@ -53,6 +54,12 @@ router.post(
   urlencodedParser,
   auth,
   editContentController.rootAccessControl.editContent
+);
+router.post(
+  '/favorite',
+  urlencodedParser,
+  auth,
+  favoriteController.rootAccessControl.favorite
 );
 
 module.exports = router;

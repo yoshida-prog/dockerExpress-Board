@@ -1,30 +1,26 @@
 const { Sequelize } = require('sequelize');
 const db = require('../models/DBconfig');
 
-module.exports = (req, res, next) => {
+module.exports = async (req, res, next) => {
     try {
         const username = req.username;
         const url = req.url.replace('/', '');
-        db.User.findOne({
-            where: {
-                name: username
-            }
-        }).then(() => {
-            db.Post.findAll({
-                order: [
-                    ['id', 'DESC']
-                ]
-            }).then(posts => {
-                res.render(url, {
-                    username,
-                    posts
-                });
-            }).catch(err => {
-                res.status(500).send(err);
-            })
-        }).catch(err => {
-            res.status(500).send(err);
-        })
+        const posts = await db.Post.findAll({
+            order: [
+                ['id', 'DESC']
+            ]
+        });
+        const favorites = await db.Favorite.findAll({
+            order: [
+                ['id', 'DESC']
+            ]
+        });
+        console.log(favorites);
+        res.render(url, {
+            username,
+            posts,
+            favorites
+        });
     } catch (err) {
         return res.status(401).send(err);
     }
