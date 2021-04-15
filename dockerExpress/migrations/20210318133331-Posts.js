@@ -21,6 +21,12 @@ module.exports = {
       content: {
         type: Sequelize.STRING
       },
+      nothingFav: {
+        type: Sequelize.BOOLEAN
+      },
+      favYourself: {
+        type: Sequelize.BOOLEAN
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

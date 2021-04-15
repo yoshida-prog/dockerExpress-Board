@@ -28,13 +28,29 @@
     </header>
 
     <main>
+      <% let favListCount = 0; %>
       <% posts.forEach((value, key) => { %>
         <div class="viewContainer">
           <h3><%= value.title %></h3>
           <p class="postContent"><%= value.content %></p>
           <p class="ontributor">投稿者： <%= value.username %></p>
           <form class="favoriteForm">
-            <input class="favoriteBtn" type="button" value="&#9825;"><span class="favoriteCount" data-contentid="<%= value.id %>">0</span>
+            <input id="favBtn<%= value.id %>" class="favoriteBtn" type="button">
+            <label for="favBtn<%= value.id %>" data-contentid="<%= value.id %>">
+              <% if (value.username != username || (value.favYourself === false && value.username === username) ) { %>
+                &#9825;
+              <% } else if (value.favYourself === true && value.username === username) { %>
+                &#9829;
+              <% }; %>
+            </label>
+            <span class="favoriteCount">
+              <% if (value.nothingFav === true) { %>
+                <%= 0 %>
+                <% favListCount++; %>
+              <% } else { %>
+                <%= favList[key - favListCount].favCount %>
+              <% }; %>
+            </span>
           </form>
           <% if (username === value.username) { %>
             <span>
@@ -54,16 +70,11 @@
         const url = '/favorite';
         const postFavorite = (e) => {
           const contentID = e.target.nextElementSibling.dataset.contentid;
-          const favoriteCount = e.target.nextElementSibling.innerText;
-          console.log(e.target.value);
-          if (e.target.value === '') {
-            console.log('OK');
-          }
+          const favoriteCount = e.target.nextElementSibling.nextElementSibling.innerText;
           const formData = {
             contentID,
             favoriteCount
           };
-          // ここにハートマークを反転させる処理を追加する。
           fetch(url, {
             method: 'POST',
             headers: {
@@ -74,14 +85,12 @@
             if (!respose.ok) {
               throw 'favorite post error!';
             }
-            console.log('OK');
             return respose.text();
           }).catch(error => {
             alert(error);
           });
         };
         for(var i = 0; i < favoriteBtn.length; i++) {
-          // ここにいいね済みかどうかで、inputのvalue属性をどのハートにするか決める。
           favoriteBtn[i].addEventListener('click', postFavorite, false);
         };
 

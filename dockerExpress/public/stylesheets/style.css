@@ -191,7 +191,7 @@ form#deleteBtn {
 
 .favoriteBtn {
   border: none;
-  background-color: transparent;
+  padding: 0;
 }
 
 .favoriteBtn:focus {

@@ -41,6 +41,12 @@ const Post = sequelize.define('Posts', {
     content: {
       type: Sequelize.STRING
     },
+    nothingFav: {
+      type: Sequelize.BOOLEAN
+    },
+    favYourself: {
+      type: Sequelize.BOOLEAN
+    },
     createdAt: Sequelize.DATE,
     updatedAt: Sequelize.DATE
   },{

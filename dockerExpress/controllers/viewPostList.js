@@ -11,15 +11,24 @@ module.exports = async (req, res, next) => {
             ]
         });
         const favorites = await db.Favorite.findAll({
-            order: [
-                ['id', 'DESC']
-            ]
+            attributes: [
+                'contentID',
+                [db.sequelize.fn('count', db.sequelize.col('contentID')), 'favCount']
+            ],
+            group: 'contentID'
         });
-        console.log(favorites);
+        const favList = favorites.map((favorite) => {
+            return favorite.dataValues;
+        });
+        // favListをcontentID降順に並び替え
+        favList.sort((a, b) => {
+            return a.contentID > b.contentID ? -1 : 1;
+        });
+        console.log(favList);
         res.render(url, {
             username,
             posts,
-            favorites
+            favList
         });
     } catch (err) {
         return res.status(401).send(err);
