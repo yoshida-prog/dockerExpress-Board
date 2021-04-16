@@ -18,7 +18,7 @@
         <a href="/create">投稿を作成</a>
         <ul class="menu">
             <li class="menu__single">
-                <div class="init-bottom"><span><%= username %></span><span class="arrow-pointer">▼</span></div>
+                <div class="init-bottom"><span id="username" data-userid="<%= userID %>"><%= username %></span><span class="arrow-pointer">▼</span></div>
                 <ul class="menu__second-level">
                     <li><a href="/logout">ログアウト</a></li>
                 </ul>
@@ -37,9 +37,9 @@
           <form class="favoriteForm">
             <input id="favBtn<%= value.id %>" class="favoriteBtn" type="button">
             <label for="favBtn<%= value.id %>" data-contentid="<%= value.id %>">
-              <% if (value.username != username || (value.favYourself === false && value.username === username) ) { %>
+              <% if (!userFavList.includes(value.id)) { %>
                 &#9825;
-              <% } else if (value.favYourself === true && value.username === username) { %>
+              <% } else { %>
                 &#9829;
               <% }; %>
             </label>
@@ -67,11 +67,13 @@
         // いいねボタンのFetchAPIのPOST送信
         const favoriteForm = document.querySelectorAll('.favoriteForm input');
         const favoriteBtn = document.querySelectorAll('.favoriteBtn');
+        const userID = document.getElementById('username').dataset.userid;
         const url = '/favorite';
         const postFavorite = (e) => {
           const contentID = e.target.nextElementSibling.dataset.contentid;
           const favoriteCount = e.target.nextElementSibling.nextElementSibling.innerText;
           const formData = {
+            userID,
             contentID,
             favoriteCount
           };

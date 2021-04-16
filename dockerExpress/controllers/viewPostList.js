@@ -5,6 +5,12 @@ module.exports = async (req, res, next) => {
     try {
         const username = req.username;
         const url = req.url.replace('/', '');
+        const user = await db.User.findOne({
+            where: {
+                name: username
+            }
+        });
+        const userID = user.id;
         const posts = await db.Post.findAll({
             order: [
                 ['id', 'DESC']
@@ -24,11 +30,22 @@ module.exports = async (req, res, next) => {
         favList.sort((a, b) => {
             return a.contentID > b.contentID ? -1 : 1;
         });
-        console.log(favList);
+        //ログイン中のユーザーがいいねしている投稿IDを保持する配列を作成
+        const userFavList = [];
+        const userFavorites = await db.Favorite.findAll({
+            where: {
+                userID
+            }
+        });
+        userFavorites.forEach(userFavorite => {
+            userFavList.push(userFavorite.contentID);
+        });
         res.render(url, {
             username,
+            userID,
             posts,
-            favList
+            favList,
+            userFavList
         });
     } catch (err) {
         return res.status(401).send(err);
