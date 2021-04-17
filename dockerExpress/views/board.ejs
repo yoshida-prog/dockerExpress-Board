@@ -18,7 +18,7 @@
         <a href="/create">投稿を作成</a>
         <ul class="menu">
             <li class="menu__single">
-                <div class="init-bottom"><span><%= username %></span><span class="arrow-pointer">▼</span></div>
+                <div class="init-bottom"><span id="username" data-userid="<%= userID %>"><%= username %></span><span class="arrow-pointer">▼</span></div>
                 <ul class="menu__second-level">
                     <li><a href="/logout">ログアウト</a></li>
                 </ul>
@@ -28,26 +28,90 @@
     </header>
 
     <main>
+      <% let favListCount = 0; %>
       <% posts.forEach((value, key) => { %>
         <div class="viewContainer">
           <h3><%= value.title %></h3>
           <p class="postContent"><%= value.content %></p>
           <p class="ontributor">投稿者： <%= value.username %></p>
-          <p class="editContainer">
-            <span>ここにいいね機能</span>
-            <% if (username === value.username) { %>
-              <span>
-                <button class="editBtn" type="submit" value="<%= value.id %>">編集</button>
-                <button class="deleteBtn" type="submit" value="<%= value.id %>">削除</button>
-              </span>
-            <% } %>
-          </p>
+          <form class="favoriteForm">
+            <input id="favBtn<%= value.id %>" class="favoriteBtn" type="button">
+            <% if (!userFavList.includes(value.id)) { %>
+              <label for="favBtn<%= value.id %>" data-contentid="<%= value.id %>" class="favInactive">
+                &#9825;
+              </label>
+              <% } else { %>
+              <label for="favBtn<%= value.id %>" data-contentid="<%= value.id %>" class="favActive">
+                &#9829;
+              </label>
+            <% }; %>
+            <span class="favoriteCount">
+              <% if (value.nothingFav === true) { %>
+                <%= 0 %>
+                <% favListCount++; %>
+              <% } else { %>
+                <%= favList[key - favListCount].favCount %>
+              <% }; %>
+            </span>
+          </form>
+          <% if (username === value.username) { %>
+            <span>
+              <button class="editBtn" type="submit" value="<%= value.id %>">編集</button>
+              <button class="deleteBtn" type="submit" value="<%= value.id %>">削除</button>
+            </span>
+          <% } %>
         </div>
       <% }); %>
     </main>
 
     <script>
       document.addEventListener('DOMContentLoaded', () => {
+        // いいねボタンのFetchAPIのPOST送信
+        const favoriteForm = document.querySelectorAll('.favoriteForm input');
+        const favoriteBtn = document.querySelectorAll('.favoriteBtn');
+        const userID = document.getElementById('username').dataset.userid;
+        const url = '/favorite';
+        const postFavorite = (e) => {
+          const contentID = e.target.nextElementSibling.dataset.contentid;
+          const favoriteCount = e.target.nextElementSibling.nextElementSibling.innerText;
+          const formData = {
+            userID,
+            contentID,
+            favoriteCount
+          };
+          // いいねの状態といいね数の切り替え
+          const favoriteMarkClass = e.target.nextElementSibling.className;
+          const favoriteMark = e.target.nextElementSibling;
+          const favCountDocument = e.target.nextElementSibling.nextElementSibling;
+          if (favoriteMarkClass === 'favInactive') {
+            favoriteMark.innerText = '♥';
+            favoriteMark.className = 'favActive';
+            favCountDocument.innerText = Number(favCountDocument.innerText) + 1;
+          } else if (favoriteMarkClass === 'favActive') {
+            favoriteMark.innerText = '♡';
+            favoriteMark.className = 'favInactive';
+            favCountDocument.innerText = Number(favCountDocument.innerText) - 1;
+          }
+          fetch(url, {
+            method: 'POST',
+            headers: {
+              'Content-type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+          }).then((respose) => {
+            if (!respose.ok) {
+              throw 'favorite post error!';
+            }
+            return respose.text();
+          }).catch(error => {
+            alert(error);
+          });
+        };
+        for(var i = 0; i < favoriteBtn.length; i++) {
+          favoriteBtn[i].addEventListener('click', postFavorite, false);
+        };
+
+        // 編集・削除ボタンを動的に作成
         const editBtns = document.querySelectorAll('.editBtn');
         const deleteBtns = document.querySelectorAll('.deleteBtn');
         for(var i = 0; i < editBtns.length; i++) {

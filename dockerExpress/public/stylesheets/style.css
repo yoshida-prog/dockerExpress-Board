@@ -181,6 +181,23 @@ form#deleteBtn {
   width: 50px;
 }
 
+.favoriteForm {
+  display: inline-block;
+  align-items: unset;
+  height: auto;
+  justify-content: unset;
+  margin: 0;
+}
+
+.favoriteBtn {
+  border: none;
+  padding: 0;
+}
+
+.favoriteBtn:focus {
+  outline: none;
+}
+
 /* -------------------投稿作成画面--------------------*/
 
 form#createForm {

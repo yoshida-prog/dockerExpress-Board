@@ -2,7 +2,7 @@ const { Sequelize } = require('sequelize');
 const db = require('../models/DBconfig');
 
 exports.rootAccessControl = {
-    createContent: (req, res) => {
+    createContent: async (req, res) => {
         const title = req.body.title;
         const content = req.body.content;
         const username = req.username;
@@ -19,26 +19,21 @@ exports.rootAccessControl = {
                 username
             });
         } else {
-            db.User.findOne({
+            const user = await db.User.findOne({
                 where: {
                     name: username
                 }
-            }).then(async (results) => {
-                const userID = await results.id;
-                console.log('hi');
-                db.Post.create({
-                    userID,
-                    username,
-                    title,
-                    content
-                }).then(() => {
-                    res.redirect('/board');
-                }).catch(err => {
-                    res.status(500).send(err);
-                });
-            }).catch(err => {
-                res.status(500).send(err);
             });
+            const userID = user.id;
+            const postCreate = await db.Post.create({
+                userID,
+                username,
+                title,
+                content,
+                nothingFav: true,
+                favYourself: false
+            });
+            res.redirect('/board');
         }
     }
 }

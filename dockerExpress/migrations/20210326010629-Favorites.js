@@ -2,7 +2,7 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    return queryInterface.createTable('Posts', {
+    return queryInterface.createTable('Favorites', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -12,20 +12,8 @@ module.exports = {
       userID: {
         type: Sequelize.INTEGER
       },
-      username: {
-        type: Sequelize.STRING
-      },
-      title: {
-        type: Sequelize.STRING
-      },
-      content: {
-        type: Sequelize.STRING
-      },
-      nothingFav: {
-        type: Sequelize.BOOLEAN
-      },
-      favYourself: {
-        type: Sequelize.BOOLEAN
+      contentID: {
+        type: Sequelize.INTEGER
       },
       createdAt: {
         allowNull: false,
@@ -39,6 +27,6 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('Posts');
+    return queryInterface.dropTable('Favorites');
   }
 };

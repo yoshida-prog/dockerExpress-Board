@@ -41,14 +41,38 @@ const Post = sequelize.define('Posts', {
     content: {
       type: Sequelize.STRING
     },
+    nothingFav: {
+      type: Sequelize.BOOLEAN
+    },
+    favYourself: {
+      type: Sequelize.BOOLEAN
+    },
     createdAt: Sequelize.DATE,
     updatedAt: Sequelize.DATE
   },{
     freezeTableName: true
 });
 
+const Favorite = sequelize.define('Favorites', {
+  id: {
+    type: Sequelize.INTEGER,
+    primaryKey: true
+  },
+  userID: {
+    type: Sequelize.INTEGER
+  },
+  contentID: {
+    type: Sequelize.INTEGER
+  },
+  createdAt: Sequelize.DATE,
+  updatedAt: Sequelize.DATE
+},{
+  freezeTableName: true
+});
+
 module.exports = {
     sequelize: sequelize,
     User: User,
-    Post: Post
+    Post: Post,
+    Favorite: Favorite
 };
