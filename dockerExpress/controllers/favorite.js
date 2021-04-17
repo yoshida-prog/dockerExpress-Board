@@ -56,9 +56,6 @@ exports.rootAccessControl = {
                 }
             });
         }
-        res.json({
-            message: 'hello'
-        });
-        // res.redirect(307, '/board');
+        res.json({});
     }
 }
